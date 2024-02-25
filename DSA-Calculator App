@@ -1,0 +1,222 @@
+package demo;
+import java.util.Scanner;
+import java.lang.Math;
+
+public class ScientificCalculator 
+{
+    public static void main(String[] args) 
+    {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Enter the first number: ");
+        double X = sc.nextDouble();
+
+        System.out.println("Enter the second number: ");
+        double Y = sc.nextDouble();
+
+        // Consume the newline character
+        sc.nextLine();
+
+        System.out.println("Enter the operation (+, -, *, /, sin, cos, tan, log, sqrt, cuberoot, pow, max, min, gcd, lcm, factorial, complex): ");
+        String operation = sc.nextLine();
+
+        double result = 0.0;
+
+        switch(operation)
+        {
+            case "+":
+                result = X + Y;
+                break;
+
+            case "-":
+                result = X - Y;
+                break;
+
+            case "*":
+                result = X * Y;
+                break;
+
+            case "/":
+                if (Y != 0)
+                {
+                    result = X / Y;
+                } 
+                else 
+                {
+                    System.out.println("Error: Cannot divide by zero!");
+                    return;
+                }
+                break;
+
+            case "sin":
+                result = Math.sin(X);
+                break;
+
+            case "cos":
+                result = Math.cos(X);
+                break;
+
+            case "tan":
+                result = Math.tan(X);
+                break;
+
+            case "log":
+                if (X> 0) 
+                {
+                    result = Math.log(X);
+                } 
+                else 
+                {
+                    System.out.println("Error: Invalid input for logarithm!");
+                    return;
+                }
+                break;
+
+            case "sqrt":
+                if (X >= 0) 
+                {
+                    result = Math.sqrt(X);
+                }
+                else 
+                {
+                    System.out.println("Error: Invalid input for square root!");
+                    return;
+                }
+                break;
+
+            case "cuberoot":
+                result = Math.cbrt(X);
+                break;
+
+            case "pow":
+                result = Math.pow(X, Y);
+                break;
+
+            case "max":
+                result = Math.max(X, Y);
+                break;
+
+            case "min":
+                result = Math.min(X, Y);
+                break;
+
+            case "gcd":
+                result = gcd((int) X, (int) Y);
+                break;
+
+            case "lcm":
+                result = lcm((int) X, (int) Y);
+                break;
+
+            case "factorial":
+                result = factorial((int) X);
+                break;
+
+            case "complex":
+                System.out.println("Enter the real part of the complex number: ");
+                double realPart = sc.nextDouble();
+                System.out.println("Enter the imaginary part of the complex number: ");
+                double imaginaryPart = sc.nextDouble();
+                ComplexNumber complexNumber1 = new ComplexNumber(X, Y);
+                ComplexNumber complexNumber2 = new ComplexNumber(realPart, imaginaryPart);
+                performComplexOperations(complexNumber1, complexNumber2);
+                return;
+
+            default:
+           
+                System.out.println("Invalid operation");
+                return;
+        }
+
+        System.out.println("Result: " + result);
+    }
+
+    // Calculate the Greatest Common Divisor (GCD) using Euclidean algorithm
+    public static int gcd(int a, int b)
+    {
+        if (b == 0) 
+        {
+            return a;
+            }
+        return gcd(b, a % b);
+    }
+
+    // Calculate the Least Common Multiple (LCM)
+    public static int lcm(int a, int b)
+    {
+        return (a * b) / gcd(a, b);
+    }
+
+    // Calculate the factorial of a number
+    public static int factorial(int n) 
+    {
+        if (n == 0 || n == 1)
+        {
+            return 1;
+        }
+        return n * factorial(n - 1);
+    }
+
+    // Perform complex number operations
+    public static void performComplexOperations(ComplexNumber num1, ComplexNumber num2)
+    {
+        System.out.println("Complex Number 1: " + num1);
+        System.out.println("Complex Number 2: " + num2);
+
+        System.out.println("Addition: " + num1.add(num2));
+        System.out.println("Subtraction: " + num1.subtract(num2));
+        System.out.println("Multiplication: " + num1.multiply(num2));
+        System.out.println("Division: " + num1.divide(num2));
+        System.out.println("Modulus of Complex Number 1: " + num1.modulus());
+        System.out.println("Modulus of Complex Number 2: " + num2.modulus());
+    }
+}
+class ComplexNumber 
+{
+    private double realPart;
+    private double imaginaryPart;
+
+    public ComplexNumber(double realPart, double imaginaryPart)
+    {
+        this.realPart = realPart;
+        this.imaginaryPart = imaginaryPart;
+    }
+
+    public ComplexNumber add(ComplexNumber other)
+    {
+        return new ComplexNumber(realPart + other.realPart, imaginaryPart + other.imaginaryPart);
+    }
+
+    public ComplexNumber subtract(ComplexNumber other)
+    {
+        return new ComplexNumber(realPart - other.realPart, imaginaryPart - other.imaginaryPart);
+    }
+
+    public ComplexNumber multiply(ComplexNumber other) 
+    {
+        return new ComplexNumber(
+                realPart * other.realPart - imaginaryPart * other.imaginaryPart,
+                realPart * other.imaginaryPart + imaginaryPart * other.realPart
+        );
+    }
+
+    public ComplexNumber divide(ComplexNumber other)
+    {
+        double denominator = other.realPart * other.realPart + other.imaginaryPart * other.imaginaryPart;
+        return new ComplexNumber(
+                (realPart * other.realPart + imaginaryPart * other.imaginaryPart) / denominator,
+                (imaginaryPart * other.realPart - realPart * other.imaginaryPart) / denominator
+        );
+    }
+
+    public double modulus()
+    {
+        return Math.sqrt(realPart * realPart + imaginaryPart * imaginaryPart);
+    }
+
+    @Override
+    public String toString() 
+    {
+        return realPart + " + " + imaginaryPart + "i";
+    }
+}
